@@ -1,20 +1,33 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { isEmail } from 'validator';
-import { get } from 'lodash';
+import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { Container } from '../../styles/GlobalStyles';
 import { Form } from './styled';
-import axios from '../../services/axios';
-import history from '../../services/history';
+import * as actions from '../../store/modules/auth/actions';
 
 import Loading from '../../components/Loading';
 
-export default function Register() {
+export default function Register(props) {
+  const dispatch = useDispatch();
+  const id = useSelector((state) => state.auth.user.id);
+  const nameStored = useSelector((state) => state.auth.user.nome);
+  const emailStored = useSelector((state) => state.auth.user.email);
+  const isLoading = useSelector((state) => state.auth.isLoading);
+  const { history } = props;
+
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsloading] = useState(false);
+
+  React.useEffect(() => {
+    if (!id) return;
+
+    setNome(nameStored);
+    setEmail(emailStored);
+  }, [emailStored, id, nameStored]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -30,36 +43,20 @@ export default function Register() {
       toast.error('E-mail inválido.');
     }
 
-    if (password.length < 6 || password.length > 255) {
+    if (!id && (password.length < 6 || password.length > 255)) {
       formErrors = true;
       toast.error('Senha deve conter entre 6 e 255 caracteres.');
     }
 
     if (formErrors) return;
 
-    setIsloading(true);
-
-    try {
-      await axios.post('/users', {
-        nome,
-        password,
-        email,
-      });
-
-      toast.success('Cadastro realizado com sucesso!');
-      setIsloading(false);
-      history.push('/');
-    } catch (exception) {
-      const errors = get(exception, 'response.data.errors', []);
-      errors.map((error) => toast.error(error));
-      setIsloading(false);
-    }
+    dispatch(actions.registerRequest({ nome, email, password, id, history }));
   }
 
   return (
     <Container>
       <Loading isLoading={isLoading} />
-      <h1>Cadastro</h1>
+      <h1>{id ? 'Editar Dados' : 'Cadastro'}</h1>
       <Form onSubmit={handleSubmit}>
         <label htmlFor="nome">
           Nome:
@@ -94,8 +91,12 @@ export default function Register() {
           />
         </label>
 
-        <button type="submit">Criar minha conta</button>
+        <button type="submit">{id ? 'Salvar' : 'Criar minha conta'}</button>
       </Form>
     </Container>
   );
 }
+
+Register.propTypes = {
+  history: PropTypes.shape({}).isRequired,
+};
