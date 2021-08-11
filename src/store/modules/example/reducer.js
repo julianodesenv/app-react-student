@@ -7,7 +7,6 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case types.BOTAO_CLICADO_SUCCESS: {
-      console.log('success');
       const newState = { ...state };
       newState.botaoClicado = !newState.botaoClicado;
 
@@ -15,12 +14,10 @@ export default function (state = initialState, action) {
     }
 
     case types.BOTAO_CLICADO_REQUEST: {
-      console.log('request');
       return state;
     }
 
     case types.BOTAO_CLICADO_FAILURE: {
-      console.log('failure');
       return state;
     }
 
