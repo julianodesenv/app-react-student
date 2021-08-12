@@ -75,8 +75,8 @@ export default function Students() {
         {students.map((student, index) => (
           <div key={String(student.id)}>
             <ProfilePicture>
-              {get(student, 'Fotos[0].url', false) ? (
-                <img src={student.Fotos[0].url} alt="" title="" />
+              {get(student, 'Photos[0].url', false) ? (
+                <img src={student.Photos[0].url} alt="" title="" />
               ) : (
                 <FaUserCircle size={36} />
               )}

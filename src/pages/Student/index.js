@@ -34,7 +34,7 @@ export default function Student({ match, history }) {
       try {
         setIsLoading(true);
         const { data } = await axios.get(`/alunos/${id}`);
-        const Foto = get(data, 'Fotos[0].url', '');
+        const Foto = get(data, 'Photos[0].url', '');
 
         setNome(data.nome);
         setSobrenome(data.sobrenome);
@@ -151,7 +151,7 @@ export default function Student({ match, history }) {
             <FaUserCircle size={180} />
           )}
 
-          <Link to={`/fotos/${id}`}>
+          <Link to={`/photos/${id}`}>
             <FaEdit size={24} />
           </Link>
         </ProfilePicture>
