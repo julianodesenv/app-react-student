@@ -9,7 +9,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { Container } from '../../styles/GlobalStyles';
-import { AlunoContainer, ProfilePicture } from './styled';
+import { AlunoContainer, ProfilePicture, NovoAluno } from './styled';
 
 import axios from '../../services/axios';
 
@@ -68,6 +68,9 @@ export default function Students() {
     <Container>
       <Loading isLoading={isLoading} />
       <h1>Alunos</h1>
+
+      <NovoAluno to="/student">Novo Aluno</NovoAluno>
+
       <AlunoContainer>
         {students.map((student, index) => (
           <div key={String(student.id)}>
@@ -80,7 +83,7 @@ export default function Students() {
             </ProfilePicture>
             <span>{student.nome}</span>
             <span>{student.sobrenome}</span>
-            <Link to={`/student/${student.id}`}>
+            <Link to={`/student/${student.id}/edit`}>
               <FaEdit size={16} />
             </Link>
             <Link onClick={handleDeleteAsk} to={`/student/${student.id}`}>
