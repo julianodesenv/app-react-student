@@ -10,6 +10,14 @@ export const AlunoContainer = styled.div`
     padding: 5px 0;
   }
 
+  div a {
+    color: #fff;
+  }
+
+  div span {
+    color: #000;
+  }
+
   div + div {
     border-top: 1px solid #eee;
   }
